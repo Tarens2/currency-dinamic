@@ -1,0 +1,67 @@
+.currency-show-block {
+  color: white;
+  background: #336666;
+  text-align: center;
+  padding: 20px 40px;
+  border-radius: 7px;
+
+  &__first-row {
+    padding-bottom: 20px;
+  }
+
+}
+
+select {
+  color: #000;
+}
+
+.v-select {
+
+  &:after {
+    content: 'Валюта';
+    top: 50%;
+    left: 10px;
+    position: absolute;
+    color: lightgray;
+    transform: translateY(-50%);
+  }
+
+  div.dropdown-toggle {
+    background: white;
+    padding: 4px;
+    min-height: 38px;
+  }
+
+  .open-indicator {
+    bottom: calc(50% - 12px);
+  }
+
+  &.open {
+
+    .open-indicator {
+      bottom: calc(50% - 12px);
+    }
+
+  }
+  input.form-control {
+    display: none !important;
+  }
+
+  span.selected-tag {
+    height: auto;
+    margin: 0;
+  }
+
+  li {
+    background: white;
+  }
+
+}
+
+.value-selected {
+
+  .v-select:after {
+    content: none;
+  }
+
+}

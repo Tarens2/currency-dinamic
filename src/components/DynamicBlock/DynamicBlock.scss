@@ -1,0 +1,18 @@
+.dynamic-block {
+  margin-top: 20px;
+  padding: 20px;
+  background: #F3F7F9;
+  border-radius: 7px;
+  box-shadow: 0 2px 6px rgba(0,0,0,.1);
+  margin-bottom: 60px;
+  .red {
+    color: red;
+  }
+  .green {
+    color: green;
+  }
+  &__dynamic-table {
+    max-height: 600px;
+    overflow-y: scroll;
+  }
+}
