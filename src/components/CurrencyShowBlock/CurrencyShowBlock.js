@@ -33,13 +33,11 @@ export default {
             let now = new Date();
             let date_req2 = moment().format("DD.MM.YYYY");
             let date_req1 = moment(now.setDate(now.getDate() - this.daysCount)).format("DD.MM.YYYY");
-            console.log(date_req1,date_req2);
             this.$http.jsonp(urls.urlCurrenciesDynamics(date_req1, date_req2, this.selectedCurrency.value),
                 {})
                 .then(response => {
                     parseString(response.body.results[0], (err, result) => {
                         this.setDynamic(result.ValCurs);
-                        console.log('ValCurs', result.ValCurs);
                     })
                 }, error => console.log(error));
         },
@@ -49,10 +47,7 @@ export default {
     },
 
     created() {
-        this.$http.jsonp(urls.urlCurrenciesTypes(),
-            {
-                trim: true
-            })
+        this.$http.jsonp(urls.urlCurrenciesTypes(),{})
             .then(response => {
                 parseString(response.body.results[0], (err, result) => {
                     this.setCurrencies(result.Valuta.Item);

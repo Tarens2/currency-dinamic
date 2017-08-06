@@ -76,6 +76,7 @@
             },
             setDaysCountHandler(event) {
                 this.setDaysCount(event.target.value);
+
                 let now = new Date();
                 let date_req2 = moment().format("DD.MM.YYYY");
                 let date_req1 = moment(now.setDate(now.getDate() - this.daysCount)).format("DD.MM.YYYY");
@@ -85,13 +86,15 @@
                     .then(response => {
                         parseString(response.body.results[0], (err, result) => {
                             this.setDynamic(result.ValCurs);
+                            console.log('done')
                         })
                     }, error => console.log(error));
+
             },
             ...mapActions([
                 'setCurrencies',
                 'setDynamic',
-                'setDaysCount'
+                'setDaysCount',
             ]),
         },
         computed: {
