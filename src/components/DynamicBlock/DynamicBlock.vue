@@ -4,7 +4,7 @@
             <div class="row">
                 <div class="col-sm-12">
                     <div class="form-group">
-                        <label for="daysCount">Показать график за последнии кол-во дней: </label>
+                        <label for="daysCount">Показать график за последнии (кол-во дней): </label>
                         <input type="number"
                                id="daysCount"
                                @keyup.enter="setDaysCountHandler"
