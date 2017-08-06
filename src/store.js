@@ -28,7 +28,14 @@ export default new Vuex.Store({
             commit('SET_DYNAMIC', newDynamic)
         },
         setDaysCount({commit}, daysCount = 10) {
-            commit('SET_DAYS_COUNT', daysCount > 1000 ? 1000: daysCount);
+            let count = daysCount;
+            if(count < 1) {
+                count = 1;
+            }
+            if(count > 1000) {
+                count = 1000;
+            }
+            commit('SET_DAYS_COUNT', count);
         },
         setSelectedCurrency({commit}, selectedCurrency = '') {
             commit('SET_SELECTED_CURRENCY', selectedCurrency);

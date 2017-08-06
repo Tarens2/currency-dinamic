@@ -17,36 +17,35 @@ select {
 
 .v-select {
 
-  &:after {
-    content: 'Валюта';
-    top: 50%;
-    left: 10px;
-    position: absolute;
-    color: lightgray;
-    transform: translateY(-50%);
-  }
 
   div.dropdown-toggle {
     background: white;
     padding: 4px;
     min-height: 38px;
+    position: relative;
   }
 
-  .open-indicator {
+  i.open-indicator {
     bottom: calc(50% - 12px);
   }
 
   &.open {
 
-    .open-indicator {
+    i.open-indicator {
       bottom: calc(50% - 12px);
     }
 
   }
-  input.form-control {
-    display: none !important;
-  }
+  &.unsearchable input[type=search] {
+    position: absolute!important;
+    z-index: 10;
+    width: 100%!important;
+    left: 0;
+    top: 0;
+    display: block!important;
+    max-width: none!important;
 
+  }
   span.selected-tag {
     height: auto;
     margin: 0;
@@ -56,14 +55,6 @@ select {
 
   li {
     background: white;
-  }
-
-}
-
-.value-selected {
-
-  .v-select:after {
-    content: none;
   }
 
 }

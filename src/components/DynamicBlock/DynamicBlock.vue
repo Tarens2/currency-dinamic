@@ -86,7 +86,6 @@
                     .then(response => {
                         parseString(response.body.results[0], (err, result) => {
                             this.setDynamic(result.ValCurs);
-                            console.log('done')
                         })
                     }, error => console.log(error));
 
@@ -107,7 +106,7 @@
 
 
             dynamicData() {
-                if (!this.dynamic.length) return {};
+                if (!this.dynamic.length) return {datasets:[]};
                 let dates = this.dynamic.map(function (item) {
                     return item.date;
                 }).reverse();
