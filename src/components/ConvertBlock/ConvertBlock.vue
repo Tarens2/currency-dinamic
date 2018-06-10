@@ -35,100 +35,88 @@
 
 </template>
 <script>
-    import {mapActions, mapState} from 'vuex';
-    import moment from "moment";
-    import urls from "../../config";
-    import {parseString} from 'xml2js';
+import { mapState } from 'vuex';
+import { parseString } from 'xml2js';
+import moment from 'moment';
+import urls from '../../config';
 
-    export default {
-        data: () => {
-            return {
+export default {
+  data: () => ({
+    left: {
+      currency: '',
+      value: '',
+      count: 0,
+      error: false,
+    },
+    right: {
+      currency: '',
+      value: '',
+      count: 0,
+      error: false,
+    },
+  }),
+  computed: {
+    ...mapState(['currencies']),
+    leftCurrencies() {
+      return this.currencies.filter(item => item.id !== this.right.currency.id);
+    },
+    rightCurrencies() {
+      return this.currencies.filter(item => item.id !== this.left.currency.id);
+    },
+  },
+  watch: {
+    'left.currency': function leftCurrency() {
+      this.getCurrency(this.left.currency.id, 'left');
+      this.resetValues('right', 'left');
+    },
+    'right.currency': function rightCurrency() {
+      this.getCurrency(this.right.currency.id, 'right');
+      this.resetValues('left', 'right');
+    },
+    'left.value': function leftValue() {
+      this.resetValues('right', 'left');
+    },
+    'right.value': function rightValue() {
+      this.resetValues('right', 'left');
+    },
+  },
+  methods: {
+    getCurrency(id, side) {
+      const now = new Date();
+      const dateReq2 = moment().format('DD.MM.YYYY');
+      const dateReq1 = moment(now.setDate(now.getDate() - 2)).format('DD.MM.YYYY');
 
-                left: {
-                    currency: '',
-                    value: '',
-                    count: 0,
-                    error: false
-                },
-                right: {
-                    currency: '',
-                    value: '',
-                    count: 0,
-                    error: false
-                }
-
-            }
+      this.$http.jsonp(urls.urlCurrenciesDynamics(dateReq1, dateReq2, id), {}).then(
+        (response) => {
+          parseString(response.body.results[0], (err, result) => {
+            const record = result.ValCurs.Record;
+            this[side].value = record && record.length ? record[record.length - 1].Value[0] : '1';
+            this[side].error = !(record && record.length);
+          });
         },
-        computed: {
-            ...mapState(['currencies']),
-            leftCurrencies() {
-                return this.currencies.filter((item) => {
-                    return item.id != this.right.currency.id;
-                })
-            },
-            rightCurrencies() {
-                return this.currencies.filter((item) => {
-                    return item.id != this.left.currency.id;
-                })
-            }
-        },
-        watch: {
-            ['left.currency']() {
-                this.getCurrency(this.left.currency.id, 'left');
-                this.resetValues('right', 'left');
-
-            },
-            ['right.currency']() {
-                this.getCurrency(this.right.currency.id, 'right');
-                this.resetValues('left', 'right');
-            },
-            ['left.value']() {
-                this.resetValues('right', 'left');
-
-            },
-            ['right.value']() {
-                this.resetValues('right', 'left');
-
-            }
-
-        },
-        methods: {
-            getCurrency(id, side) {
-                let now = new Date();
-                let date_req2 = moment().format("DD.MM.YYYY");
-                let date_req1 = moment(now.setDate(now.getDate() - 2)).format("DD.MM.YYYY");
-
-                this.$http.jsonp(urls.urlCurrenciesDynamics(date_req1, date_req2, id), {})
-                    .then(response => {
-                        parseString(response.body.results[0], (err, result) => {
-                            let record = result.ValCurs.Record;
-                            this[side].value = record && record.length ?
-                                record[record.length - 1].Value[0] : '1';
-                            this[side].error = !(record && record.length);
-                        })
-                    }, error => console.log(error));
-            },
-            changeValue(event, side, value) {
-                this[value].count = event.target.value;
-                this[side].count = this.coefficient(side, value) * event.target.value;
-            },
-            resetValues(side1, side2) {
-                this.right.count = this.coefficient(side1, side2) * this.left.count;
-            },
-            coefficient(value, side) {
-                return Number(this[side].value.replace(',', '.') / this[value].value.replace(',', '.'));
-            }
-        }
-
-    };
+        error => console.error(error),
+      );
+    },
+    changeValue(event, side, value) {
+      this[value].count = event.target.value;
+      this[side].count = this.coefficient(side, value) * event.target.value;
+    },
+    resetValues(side1, side2) {
+      this.right.count = this.coefficient(side1, side2) * this.left.count;
+    },
+    coefficient(value, side) {
+      return Number(this[side].value.replace(',', '.') / this[value].value.replace(',', '.'));
+    },
+  },
+};
 </script>
 
 <style>
-    .last {
-        padding-bottom: 70px;
-    }
+.last {
+  padding-bottom: 70px;
+}
 
-    .row-pad {
-        margin-bottom: 5px;
-    }
+.row-pad {
+  margin-bottom: 5px;
+}
 </style>

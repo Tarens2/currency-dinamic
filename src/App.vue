@@ -1,7 +1,7 @@
 <template>
     <div id="app" class="top">
         <div class="container">
-            <h1>Курсы валют</h1>
+            <h1>Currency dynamic</h1>
             <currency-show-block></currency-show-block>
             <dynamic-block></dynamic-block>
         </div>
@@ -12,21 +12,21 @@
 </template>
 
 <script>
-    import store from './store';
-    import CurrencyShowBlock from './components/CurrencyShowBlock/CurrencyShowBlock.vue';
-    import DynamicBlock from './components/DynamicBlock/DynamicBlock.vue';
-    import ConvertBlock from './components/ConvertBlock/ConvertBlock.vue';
+import store from './store';
+import CurrencyShowBlock from './components/CurrencyShowBlock/CurrencyShowBlock.vue';
+import DynamicBlock from './components/DynamicBlock/DynamicBlock.vue';
+import ConvertBlock from './components/ConvertBlock/ConvertBlock.vue';
 
-    export default {
-        name: 'app',
-        data: () => ({}),
-        components: {CurrencyShowBlock, DynamicBlock, ConvertBlock},
-        store
-    }
+export default {
+  name: 'app',
+  data: () => ({}),
+  components: { CurrencyShowBlock, DynamicBlock, ConvertBlock },
+  store,
+};
 </script>
 
 <style>
-    .top {
-        margin-top: 30px;
-    }
+.top {
+  margin-top: 30px;
+}
 </style>

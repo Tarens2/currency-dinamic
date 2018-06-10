@@ -15,22 +15,22 @@
     </div>
 </template>
 <script>
-    export default {
-        props: ['currencies', 'count', 'currency'],
-        data: function () {
-            return {
-                error: false
-            }
-        },
-        computed: {
-            typeError: function () {
-                return this.error? 'text': 'number';
-            }
-        },
-        methods: {
-            changeValue($event) {
-                this.$emit('changeValue', $event);
-            }
-        }
-    }
+export default {
+  props: ['currencies', 'count', 'currency'],
+  data() {
+    return {
+      error: false,
+    };
+  },
+  computed: {
+    typeError() {
+      return this.error ? 'text' : 'number';
+    },
+  },
+  methods: {
+    changeValue($event) {
+      this.$emit('changeValue', $event);
+    },
+  },
+};
 </script>
