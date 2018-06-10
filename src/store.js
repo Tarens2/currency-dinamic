@@ -14,8 +14,7 @@ export default new Vuex.Store({
       const newCurr = currencies.map(item => ({
         id: item.$.ID,
         value: item.$.ID,
-        label: item.Name[0],
-        engLabel: item.EngName[0],
+        label: item.EngName[0],
       }));
 
       commit('SET_CURRENCIES', newCurr);

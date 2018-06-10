@@ -2,7 +2,7 @@
     <div class="currency-show-block">
         <div class="row currency-show-block__first-row">
             <div class="col-sm-6">
-                <div :class="{ 'value-selected': selectedCurrency}">
+                <div :class="{'value-selected': selectedCurrency}">
                     <v-select
                             v-model="selectedCurrencyModel"
                             :options="currencies"
@@ -18,7 +18,7 @@
         </div>
         <div class="row">
             <div class="col-sm-6">
-                {{selectedCurrency.engLabel}}
+                {{selectedCurrency.label}}
             </div>
             <div class="col-sm-6">
                 {{valueCurrency}}
@@ -45,6 +45,7 @@ export default {
       'currencies',
       'dynamic',
       'selectedCurrency',
+      'daysCount',
     ]),
     valueCurrency() {
       return this.dynamic && this.dynamic.length ? this.dynamic[0].value : '-';
