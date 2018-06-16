@@ -52,7 +52,7 @@ import { parseString } from 'xml2js';
 import DynamicChart from '../../components/DynamicChart/DynamicChart';
 import urls from '../../config';
 import './DynamicBlock.scss';
-
+import service from '../../service';
 
 export default {
   data: () => ({
@@ -68,29 +68,19 @@ export default {
   }),
   methods: {
     diffValue(index) {
-      return this.dynamic.length && index + 1 != this.dynamic.length ?
+      return this.dynamic.length && index + 1 !== this.dynamic.length ?
         (this.dynamic[index].value - this.dynamic[index + 1].value).toString().match(/^-?\d+(?:\.\d{0,2})?/)[0] : 0;
     },
     compareValue(index) {
-      return this.dynamic.length && index + 1 != this.dynamic.length ?
+      return this.dynamic.length && index + 1 !== this.dynamic.length ?
         this.dynamic[index].value > this.dynamic[index + 1].value : true;
     },
     setDaysCountHandler(event) {
       this.setDaysCount(event.target.value);
 
-      const now = new Date();
-      const date_req2 = moment().format('DD.MM.YYYY');
-      const date_req1 = moment(now.setDate(now.getDate() - this.daysCount)).format('DD.MM.YYYY');
-
-      this.$http.jsonp(
-        urls.urlCurrenciesDynamics(date_req1, date_req2, this.selectedCurrency.value),
-        {},
-      )
-        .then((response) => {
-          parseString(response.body.results[0], (err, result) => {
-            this.setDynamic(result.ValCurs);
-          });
-        }, error => console.log(error));
+      service.fetchByDate(this.daysCount, this.selectedCurrency.value).then((result) => {
+        this.setDynamic(result.ValCurs);
+      });
     },
     ...mapActions([
       'setCurrencies',
@@ -109,9 +99,10 @@ export default {
 
     dynamicData() {
       if (!this.dynamic.length) return { datasets: [] };
-      const dates = this.dynamic.map(item => item.date).reverse();
 
+      const dates = this.dynamic.map(item => item.date).reverse();
       const values = this.dynamic.map(item => item.value).reverse();
+
       return {
         labels: dates,
         datasets: [

@@ -1,6 +1,6 @@
 <template>
     <div class="last">
-        <h2>Конвертор</h2>
+        <h2>Converter</h2>
         <div class="row">
             <div class="col-sm-6 " :class="{ 'value-selected': left.currency}">
                 <v-select
@@ -36,9 +36,7 @@
 </template>
 <script>
 import { mapState } from 'vuex';
-import { parseString } from 'xml2js';
-import moment from 'moment';
-import urls from '../../config';
+import service from '../../service';
 
 export default {
   data: () => ({
@@ -82,20 +80,10 @@ export default {
   },
   methods: {
     getCurrency(id, side) {
-      const now = new Date();
-      const dateReq2 = moment().format('DD.MM.YYYY');
-      const dateReq1 = moment(now.setDate(now.getDate() - 2)).format('DD.MM.YYYY');
-
-      this.$http.jsonp(urls.urlCurrenciesDynamics(dateReq1, dateReq2, id), {}).then(
-        (response) => {
-          parseString(response.body.results[0], (err, result) => {
-            const record = result.ValCurs.Record;
-            this[side].value = record && record.length ? record[record.length - 1].Value[0] : '1';
-            this[side].error = !(record && record.length);
-          });
-        },
-        error => console.error(error),
-      );
+      service.fetchByDate(2, id).then((record) => {
+        this[side].value = record && record.length ? record[record.length - 1].Value[0] : '1';
+        this[side].error = !(record && record.length);
+      });
     },
     changeValue(event, side, value) {
       this[value].count = event.target.value;
@@ -111,7 +99,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .last {
   padding-bottom: 70px;
 }

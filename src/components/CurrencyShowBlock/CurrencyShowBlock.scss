@@ -11,50 +11,8 @@
 
 }
 
-select {
-  color: #000;
-}
-
 .v-select {
-
-
-  div.dropdown-toggle {
-    background: white;
-    padding: 4px;
-    min-height: 38px;
-    position: relative;
-  }
-
-  i.open-indicator {
-    bottom: calc(50% - 12px);
-  }
-
-  &.open {
-
-    i.open-indicator {
-      bottom: calc(50% - 12px);
-    }
-
-  }
-  &.unsearchable input[type=search] {
-    position: absolute!important;
-    z-index: 10;
-    width: 100%!important;
-    left: 0;
-    top: 0;
-    display: block!important;
-    max-width: none!important;
-
-  }
-  span.selected-tag {
-    height: auto;
-    margin: 0;
-    border: 0;
-    background: 0;
-  }
-
-  li {
+  .dropdown-toggle {
     background: white;
   }
-
 }

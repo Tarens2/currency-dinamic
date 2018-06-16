@@ -2,12 +2,20 @@ import Vue from 'vue';
 import Vuex from 'vuex';
 
 Vue.use(Vuex);
+
+export const mutationTypes = {
+  SET_SELECTED_CURRENCY: 'SET_SELECTED_CURRENCY',
+  SET_DAYS_COUNT: 'SET_DAYS_COUNT',
+  SET_DYNAMIC: 'SET_DYNAMIC',
+  SET_CURRENCIES: 'SET_CURRENCIES',
+};
+
 export default new Vuex.Store({
   state: {
     currencies: [],
-    dynamic: {},
+    dynamic: [],
     daysCount: 10,
-    selectedCurrency: '',
+    selectedCurrency: '-',
   },
   actions: {
     setCurrencies({ commit }, currencies = []) {
@@ -17,18 +25,21 @@ export default new Vuex.Store({
         label: item.EngName[0],
       }));
 
-      commit('SET_CURRENCIES', newCurr);
+      commit(mutationTypes.SET_CURRENCIES, newCurr);
+      if (newCurr.length) {
+        commit(mutationTypes.SET_SELECTED_CURRENCY, newCurr[0]);
+      }
     },
-    setDynamic({ commit }, dynamic) {
-      const newDynamic = dynamic.Record
-        ? dynamic.Record.map(item => ({
+    setDynamic({ commit }, dynamic = []) {
+      const newDynamic = dynamic
+        ? dynamic.map(item => ({
           id: item.$.Id,
           date: item.$.Date,
           value: parseFloat(item.Value[0].replace(',', '.')),
         })).reverse()
         : [];
 
-      commit('SET_DYNAMIC', newDynamic);
+      commit(mutationTypes.SET_DYNAMIC, newDynamic);
     },
     setDaysCount({ commit }, daysCount = 10) {
       let count = daysCount;
@@ -38,23 +49,20 @@ export default new Vuex.Store({
       if (count > 1000) {
         count = 1000;
       }
-      commit('SET_DAYS_COUNT', count);
-    },
-    setSelectedCurrency({ commit }, selectedCurrency = '') {
-      commit('SET_SELECTED_CURRENCY', selectedCurrency);
+      commit(mutationTypes.SET_DAYS_COUNT, count);
     },
   },
   mutations: {
-    SET_CURRENCIES(state, currencies) {
+    [mutationTypes.SET_CURRENCIES](state, currencies) {
       state.currencies = currencies;
     },
-    SET_DYNAMIC(state, dynamic) {
+    [mutationTypes.SET_DYNAMIC](state, dynamic) {
       state.dynamic = dynamic;
     },
-    SET_DAYS_COUNT(state, daysCount) {
+    [mutationTypes.SET_DAYS_COUNT](state, daysCount) {
       state.daysCount = daysCount;
     },
-    SET_SELECTED_CURRENCY(state, selectedCurrency) {
+    [mutationTypes.SET_SELECTED_CURRENCY](state, selectedCurrency) {
       state.selectedCurrency = selectedCurrency;
     },
   },

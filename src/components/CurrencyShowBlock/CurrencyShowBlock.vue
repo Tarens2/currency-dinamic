@@ -4,7 +4,7 @@
             <div class="col-sm-6">
                 <div :class="{'value-selected': selectedCurrency}">
                     <v-select
-                            v-model="selectedCurrencyModel"
+                            v-model="selectedCurrency"
                             :options="currencies"
                             placeholder="Currency"
                             :searchable="false">
@@ -29,26 +29,23 @@
 
 <script>
 import { mapState, mapActions } from 'vuex';
-import { parseString } from 'xml2js';
-import moment from 'moment';
-import urls from '../../config';
 import './CurrencyShowBlock.scss';
+import { mutationTypes } from '../../store';
+import service from '../../service';
 
 export default {
-  data() {
-    return {
-      selectedCurrencyModel: '',
-    };
-  },
   computed: {
     ...mapState([
       'currencies',
       'dynamic',
-      'selectedCurrency',
       'daysCount',
     ]),
     valueCurrency() {
       return this.dynamic && this.dynamic.length ? this.dynamic[0].value : '-';
+    },
+    selectedCurrency: {
+      get() { return this.$store.state.selectedCurrency; },
+      set(val) { this.$store.commit(mutationTypes.SET_SELECTED_CURRENCY, val); },
     },
   },
   methods: {
@@ -60,32 +57,17 @@ export default {
   },
   watch: {
     selectedCurrency() {
-      const now = new Date();
-      const dateReq2 = moment().format('DD.MM.YYYY');
-      const dateReq1 = moment(now.setDate(now.getDate() - this.daysCount)).format('DD.MM.YYYY');
-      this.$http.jsonp(
-        urls.urlCurrenciesDynamics(dateReq1, dateReq2, this.selectedCurrency.value),
-        {},
-      )
-        .then((response) => {
-          parseString(response.body.results[0], (err, result) => {
-            this.setDynamic(result.ValCurs);
-          });
-        }, error => console.error(error));
-    },
-    selectedCurrencyModel() {
-      this.setSelectedCurrency(this.selectedCurrencyModel);
+      service.fetchByDate(this.daysCount, this.selectedCurrency.value)
+        .then((result) => {
+          this.setDynamic(result);
+        });
     },
   },
 
   mounted() {
-    this.$http.jsonp(urls.urlCurrenciesTypes(), {})
-      .then((response) => {
-        parseString(response.body.results[0], (err, result) => {
-          this.setCurrencies(result.Valuta.Item);
-          [this.selectedCurrencyModel] = this.currencies;
-        });
-      }, error => console.error(error));
+    service.fetchCurrencies().then((result) => {
+      this.setCurrencies(result);
+    });
   },
 };
 </script>
