@@ -47,10 +47,7 @@
 </template>
 <script>
 import { mapState, mapActions } from 'vuex';
-import moment from 'moment';
-import { parseString } from 'xml2js';
 import DynamicChart from '../../components/DynamicChart/DynamicChart';
-import urls from '../../config';
 import './DynamicBlock.scss';
 import service from '../../service';
 
@@ -79,7 +76,7 @@ export default {
       this.setDaysCount(event.target.value);
 
       service.fetchByDate(this.daysCount, this.selectedCurrency.value).then((result) => {
-        this.setDynamic(result.ValCurs);
+        this.setDynamic(result);
       });
     },
     ...mapActions([

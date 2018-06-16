@@ -11,9 +11,11 @@
                         class="row-pad"
                 >
                 </v-select>
-                <input :type="left.error? 'text': 'number'"
-                       class="form-control" :readonly="left.error"
-                       :value="left.error? 'Ошибка': left.count"
+                <p v-if="left.error">Error</p>
+                <p v-else-if="!right.value || !left.value">not selected</p>
+                <input type="number" v-else
+                       class="form-control"
+                       :value="left.count"
                        @blur="changeValue($event, 'right', 'left')">
             </div>
             <div class="col-sm-6 row-pad" :class="{ 'value-selected': right.currency}">
@@ -25,9 +27,11 @@
                         class="row-pad"
                 >
                 </v-select>
-                <input :type="right.error? 'text': 'number'"
-                       class="form-control" :readonly="right.error"
-                       :value="right.error? 'Ошибка': right.count"
+                <p v-if="right.error">Error</p>
+                <p v-else-if="!right.value || !left.value">not selected</p>
+                <input type="number" v-else
+                       class="form-control"
+                       :value="right.count"
                        @blur="changeValue($event, 'left', 'right')">
             </div>
         </div>
